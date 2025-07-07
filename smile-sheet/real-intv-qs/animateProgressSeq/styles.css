@@ -1,0 +1,11 @@
+.progressBar {
+  height: 10px;
+  background-color: red;
+  width: 0;
+  margin: 10px 0;
+  /* transition: width 2s ease; - instead add dynamically for n seconds vis JS*/
+}
+
+.fullWidth {
+  width: 100%;
+}
