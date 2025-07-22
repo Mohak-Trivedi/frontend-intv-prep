@@ -1,0 +1,35 @@
+body {
+  font-family: sans-serif;
+}
+
+.app {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+}
+
+.cell {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #000;
+  font-weight: bold;
+  font-size: min(48px, 10vw);
+  aspect-ratio: 1 / 1;
+}
+
+.cell:not(:disabled) {
+  cursor: pointer;
+}
+
+.cell:not(:disabled):hover {
+  background-color: #fafafa;
+}
