@@ -8,6 +8,8 @@ function pipe(obj) {
       if(typeof val === "function") {
         obj[key]= val(...args);
       } else {
+        // e.g.: key = 'a', val = { b: (a, b, c) => a + b + c, c: (a, b, c) => a + b - c, }, args = [1,1,1]
+        // pipe(val)(...args) will give us {b: 3, c: 1}, which we can assign to 'a' in obj.
         obj[key] = pipe(val)(...args);
       }
     }
