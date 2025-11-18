@@ -39,3 +39,42 @@ export default function promiseAllSettled(iterable) {
     });
   });
 }
+
+// Approach 2: Using Promise.then (if async-await is not allowed)
+/**
+ * @param {Array} iterable
+ * @return {Promise<Array<{status: 'fulfilled', value: *}|{status: 'rejected', reason: *}>>}
+ */
+export default function promiseAllSettled(iterable) {
+  return new Promise((resolve, reject) =>{
+    const results = new Array(iterable.length);
+    let unresolved = iterable.length;
+
+    if(unresolved === 0) {
+      resolve([]);
+      return;
+    }
+
+    iterable.forEach((val, idx) => {
+      Promise.resolve(val).then(
+        (resolvedVal) => {
+          results[idx] = {
+            status: 'fulfilled',
+            value: resolvedVal,
+          };
+        },
+        (reason) =>{
+          results[idx] = {
+            status: 'rejected',
+            reason,
+          };
+        },
+      ).finally(() => {
+        unresolved -= 1;
+        if(unresolved === 0) {
+          resolve(results);
+        }
+      });
+    });
+  });
+}
