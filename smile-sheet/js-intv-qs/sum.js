@@ -25,5 +25,5 @@ function sum(num) {
     return num;
   }
 
-  return num;
+  return inner;
 }
