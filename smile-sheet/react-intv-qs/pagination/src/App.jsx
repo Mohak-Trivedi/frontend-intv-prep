@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import { PAGE_SIZE } from './constants';
+import ProductCard from './components/ProductCard';
+import Pagination from './components/Pagination';
 
-const PAGE_SIZE = 10;
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -50,26 +52,15 @@ function App() {
         })}
       </div>
 
-      <div className='pagination-container'>
-        <button className='page-number' disabled={currentPage===0} onClick={goToPrevPage}>⬅️</button>
-        {[...Array(noOfPages).keys()].map((pageNumber) => (
-          <button key={pageNumber} className={'page-number' + ((pageNumber===currentPage) ? ' active' : '')} onClick={() => handlePageChange(pageNumber)}>
-            {pageNumber}
-          </button>
-        ))}
-        <button className='page-number' disabled={currentPage===noOfPages-1} onClick={goToNextPage}>➡️</button>
-      </div>
+      <Pagination
+        goToPrevPage={goToPrevPage}
+        goToNextPage={goToNextPage}
+        handlePageChange={handlePageChange}
+        currentPage={currentPage}
+        noOfPages={noOfPages}
+      />
     </div>
   )
-}
-
-function ProductCard({ image, title }) {
-  return (
-    <div className='product-card'>
-      <img src={image} alt={title} className='product-img' />
-      <span>{title}</span>
-    </div>
-  );
 }
 
 export default App
