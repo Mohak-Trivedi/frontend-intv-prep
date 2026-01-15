@@ -20,7 +20,7 @@ function wait(delay) {
 // async await based:
 async function retryWithDelay(operation, retries = 3, delay = 50, finalError = 'Retry Failed') {
     try {
-        await operation();
+        return await operation();
     } catch(err) {
         if(retries <= 0) return Promise.reject(finalError);
 
