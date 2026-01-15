@@ -10,7 +10,7 @@ function wait(delay) {
 // function retryWithDelay(operation, retries = 3, delay = 50, finalError = 'Retry Failed') {
 //     return new Promise((resolve, reject) => {
 //         operation().then(resolve).catch((reason) => {
-//             if(retries <= 0) reject(finalError);
+//             if(retries <= 0) return reject(finalError);
 
 //             wait(delay).then(() => retryWithDelay(operation, retries - 1, delay, finalError)).then(resolve).catch(reject);
 //         });
