@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-function newID() {
+const newID = (() => {
   let id = 0;
   return () => id++;
-}
+})();
 
 const INITIAL_TODOS = [
   {
@@ -42,12 +42,12 @@ export default function App() {
     <div>
       <h1>Todo List</h1>
       <form onSubmit={addTodo}>
-        <input 
-          aria-label="Add new task" 
-          type="text" 
-          placeholder="Add your task" 
+        <input
+          aria-label="Add new task"
+          type="text"
+          placeholder="Add your task"
           value={newTodo}
-          onChange={e => setNewTodo(e.target.value)} 
+          onChange={e => setNewTodo(e.target.value)}
         />
         <div>
           <button type='submit'>Submit</button>
