@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
 
 const quotes = [
@@ -28,18 +28,18 @@ function App() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const element = entry.target;
+
           if (element.className.includes("list-item")) {
             observer.unobserve(element);
           }
+
           console.log(element.innerHTML);
         }
       });
     }, options);
 
     const listItems = document.querySelectorAll(".list-item");
-    listItems.forEach((item) => {
-      observer.observe(item);
-    });
+    listItems.forEach((item) => observer.observe(item));
 
     const trigger = document.querySelector(".trigger");
     if (trigger) {
