@@ -18,6 +18,13 @@ th {
   vertical-align: top;
 }
 
+th button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
 .pagination {
   display: flex;
   gap: 12px;

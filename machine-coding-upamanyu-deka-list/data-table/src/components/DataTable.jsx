@@ -17,29 +17,73 @@ function paginateUsers(usersList, pageSize, page) {
   return { pageUsers, totalPages };
 }
 
+function sortUsers(usersList, field, direction) {
+  const usersClone = usersList.slice();
+
+  switch (field) {
+    case "id":
+    case "age": {
+      return usersClone.sort((a, b) =>
+        direction === "asc" ? a[field] - b[field] : b[field] - a[field],
+      );
+    }
+    case "name":
+    case "occupation": {
+      return usersClone.sort((a, b) =>
+        direction === "asc"
+          ? a[field].localeCompare(b[field])
+          : b[field].localeCompare(a[field]),
+      );
+    }
+    default: {
+      return usersClone;
+    }
+  }
+}
+
 export default function DataTable() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const { pageUsers, totalPages } = paginateUsers(users, pageSize, page);
+  const [sortField, setSortField] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
+
+  const sortedUsers = sortUsers(users, sortField, sortDirection);
+  const { pageUsers, totalPages } = paginateUsers(sortedUsers, pageSize, page);
 
   return (
     <div>
       <table>
         <thead>
           <tr>
-            {columns.map(({ id, label }) => (
-              <th key={id}>{label}</th>
+            {columns.map(({ label, key }) => (
+              <th key={key}>
+                <button
+                  onClick={() => {
+                    if (key === sortField) {
+                      setSortDirection(
+                        sortDirection === "asc" ? "desc" : "asc",
+                      );
+                    } else {
+                      setSortField(key);
+                      setSortDirection("asc");
+                    }
+                    setPage(1);
+                  }}
+                >
+                  {label}
+                </button>
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {pageUsers.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.age}</td>
-              <td>{user.occupation}</td>
+          {pageUsers.map(({ id, name, age, occupation }) => (
+            <tr key={id}>
+              <td>{id}</td>
+              <td>{name}</td>
+              <td>{age}</td>
+              <td>{occupation}</td>
             </tr>
           ))}
         </tbody>
