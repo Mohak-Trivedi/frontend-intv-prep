@@ -1,62 +1,40 @@
 import { useState } from "react";
-import users from "../data/users.js";
 
-const columns = [
-  { label: "ID", key: "id" },
-  { label: "Name", key: "name" },
-  { label: "Age", key: "age" },
-  { label: "Occupation", key: "occupation" },
-];
-
-function paginateUsers(usersList, pageSize, page) {
+function paginateUsers(data, pageSize, page) {
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
 
-  const pageUsers = usersList.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(usersList.length / pageSize);
-  return { pageUsers, totalPages };
+  const pageData = data.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(data.length / pageSize);
+  return { pageData, totalPages };
 }
 
-function sortUsers(usersList, field, direction) {
-  const usersClone = usersList.slice();
+function sortUsers(data, columns, field, direction) {
+  const comparator = columns.find((column) => column.key === field)?.comparator;
 
-  switch (field) {
-    case "id":
-    case "age": {
-      return usersClone.sort((a, b) =>
-        direction === "asc" ? a[field] - b[field] : b[field] - a[field],
-      );
-    }
-    case "name":
-    case "occupation": {
-      return usersClone.sort((a, b) =>
-        direction === "asc"
-          ? a[field].localeCompare(b[field])
-          : b[field].localeCompare(a[field]),
-      );
-    }
-    default: {
-      return usersClone;
-    }
-  }
+  const dataClone = data.slice();
+
+  if (!comparator) return dataClone;
+
+  return dataClone.sort((a, b) => comparator(a, b, direction));
 }
 
-export default function DataTable() {
+export default function DataTable({ cols, data }) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
 
-  const sortedUsers = sortUsers(users, sortField, sortDirection);
-  const { pageUsers, totalPages } = paginateUsers(sortedUsers, pageSize, page);
+  const sortedUsers = sortUsers(data, cols, sortField, sortDirection);
+  const { pageData, totalPages } = paginateUsers(sortedUsers, pageSize, page);
 
   return (
     <div>
       <table>
         <thead>
           <tr>
-            {columns.map(({ label, key }) => (
+            {cols.map(({ label, key }) => (
               <th key={key}>
                 <button
                   onClick={() => {
@@ -78,12 +56,11 @@ export default function DataTable() {
           </tr>
         </thead>
         <tbody>
-          {pageUsers.map(({ id, name, age, occupation }) => (
-            <tr key={id}>
-              <td>{id}</td>
-              <td>{name}</td>
-              <td>{age}</td>
-              <td>{occupation}</td>
+          {pageData.map((item) => (
+            <tr key={item.id}>
+              {cols.map(({ key, renderCell }) => (
+                <td key={key}>{renderCell(item)}</td>
+              ))}
             </tr>
           ))}
         </tbody>
